@@ -1,14 +1,3 @@
-//! Stack-based virtual machine that executes a CodeObject's bytecode.
-//! Ports pyinterp/vm.py's frame-based dispatch loop.
-//!
-//! `--verbose` live tracing (traceInstruction below) is not a Phase 1
-//! feature -- it's the whole reason Phase 2 exists in the eyes of the
-//! person who asked for it: print what the VM is doing *as it executes*,
-//! flushed every instruction, not a static post-compile dump. The trace is
-//! prefixed with a worker id from day one even though there's only ever
-//! worker 0 until Z4 (isolated-heap workers + message passing) lands, so
-//! the format doesn't need to change later.
-
 const std = @import("std");
 const Io = std.Io;
 const bytecode = @import("bytecode.zig");
@@ -27,11 +16,6 @@ pub const VMError = error{
     NotIterable,
 };
 
-/// stdout is the one piece of state every worker genuinely shares (there's
-/// only one real terminal) -- everything else is per-worker/isolated, so
-/// this is the only lock most of the VM ever touches. Held around whole
-/// print/trace lines so concurrent workers' output doesn't interleave
-/// mid-line.
 fn builtinPrint(vm_ptr: *anyopaque, allocator: std.mem.Allocator, args: []const Value) anyerror!Value {
     _ = allocator;
     const self: *VM = @ptrCast(@alignCast(vm_ptr));
