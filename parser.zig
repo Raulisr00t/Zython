@@ -1,34 +1,3 @@
-//! Recursive-descent parser: token list -> AST (ast.zig). Ports
-//! pyinterp/parser.py's precedence-climbing expression parser for the same
-//! initial subset (see ast.zig for what's in/out of scope right now).
-//!
-//! Grammar (subset, precedence low -> high):
-//!
-//!     module      := stmt* ENDMARKER
-//!     stmt        := funcdef | if_stmt | while_stmt | for_stmt
-//!                  | (return_stmt | assign_stmt | expr_stmt) NEWLINE
-//!     block       := NEWLINE INDENT stmt+ DEDENT
-//!
-//!     funcdef     := 'def' NAME '(' [NAME (',' NAME)*] ')' ':' block
-//!     if_stmt     := 'if' expr ':' block ('elif' expr ':' block)* ['else' ':' block]
-//!     while_stmt  := 'while' expr ':' block
-//!     for_stmt    := 'for' NAME 'in' expr ':' block
-//!     return_stmt := 'return' [expr]
-//!     assign_stmt := (NAME | postfix '[' expr ']') ('=' | '+=' | '-=' | '*=' | '/=') expr
-//!     expr_stmt   := expr
-//!
-//!     expr        := or_test
-//!     or_test     := and_test ('or' and_test)*
-//!     and_test    := not_test ('and' not_test)*
-//!     not_test    := 'not' not_test | comparison
-//!     comparison  := arith (('==' | '!=' | '<' | '>' | '<=' | '>=') arith)?
-//!     arith       := term (('+' | '-') term)*
-//!     term        := factor (('*' | '/' | '//' | '%') factor)*
-//!     factor      := '-' factor | postfix
-//!     postfix     := atom ('(' [expr (',' expr)*] ')' | '[' expr ']')*
-//!     atom        := NUMBER | STRING | 'True' | 'False' | 'None' | NAME | '(' expr ')'
-//!                  | '[' [expr (',' expr)*] ']'
-
 const std = @import("std");
 const token_mod = @import("token.zig");
 const Token = token_mod.Token;
