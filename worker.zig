@@ -1,15 +1,3 @@
-//! Isolated-heap-per-worker threads + message passing -- the actual
-//! multithreading differentiator this project was built around (see the
-//! plan doc for why this design over a GIL or CPython's real no-GIL
-//! fine-grained locking).
-//!
-//! Each worker is a real OS thread with its own arena: no shared mutable
-//! object graph, so there's nothing to lock on ordinary Values. The only
-//! genuinely shared mutable state anywhere in the VM is stdout (see
-//! vm.zig's out_mutex) and each worker's own Mailbox queue (guarded by its
-//! own Io.Mutex/Io.Condition below) -- nothing else needs synchronization
-//! because nothing else is shared.
-
 const std = @import("std");
 const Io = std.Io;
 const bytecode = @import("bytecode.zig");
