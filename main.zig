@@ -1,15 +1,3 @@
-//! CLI entry point. Z3 scope: the full pipeline runs for real now.
-//!
-//!     zython script.zpy                     runs it
-//!     zython --dump-tokens script.zpy       + prints the token stream
-//!     zython --dump-ast script.zpy          + prints the AST
-//!     zython --dump-bytecode script.zpy     + prints compiled bytecode
-//!     zython --verbose script.zpy           live instruction trace, flushed
-//!                                            every step, as it executes
-//!
-//! `--dump-*` flags are additive (mirrors pyinterp's cli.py): the program
-//! still runs after printing that stage.
-
 const std = @import("std");
 const Io = std.Io;
 const lexer_mod = @import("lexer.zig");
