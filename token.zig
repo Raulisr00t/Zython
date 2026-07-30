@@ -1,7 +1,3 @@
-//! Token types and the Token record produced by the lexer.
-//! Ports pyinterp/tokens.py -- same token set, Zig idioms (tagged union
-//! instead of `value: object`, slices instead of Python strings).
-
 const std = @import("std");
 
 pub const TokenType = enum {
