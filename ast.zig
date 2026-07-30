@@ -1,11 +1,3 @@
-//! AST node definitions. Ports pyinterp/ast_nodes.py for the same initial
-//! subset (literals, arithmetic/comparison/boolean expressions, assignment,
-//! if/elif/else, while, function def/return) -- lists/dicts/for/class/try
-//! land later (mirrors pyinterp/tests/test_parser.py's own history).
-//!
-//! `Node` is a tagged union; child nodes are `*const Node` (arena-allocated
-//! by the parser, never individually freed -- see parser.zig).
-
 const std = @import("std");
 
 pub const BinOpKind = enum { add, sub, mul, div, floordiv, mod };
