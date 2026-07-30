@@ -1,12 +1,3 @@
-//! Tokenizer: source text -> flat list of Tokens. Ports pyinterp/lexer.py.
-//!
-//! Mirrors (a small subset of) what CPython's tokenizer does: it turns
-//! Python's significant whitespace into explicit INDENT/DEDENT tokens so
-//! the parser never has to look at column positions itself.
-//!
-//! Byte-oriented (not full UTF-8 aware) -- adequate for this project's
-//! scope, matches Phase 1's practical usage.
-
 const std = @import("std");
 const token = @import("token.zig");
 const Token = token.Token;
