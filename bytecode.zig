@@ -1,7 +1,3 @@
-//! Bytecode instruction set + CodeObject. Ports pyinterp/bytecode.py's
-//! opcode set for the M1-M3 subset (no data structures/classes/exceptions
-//! opcodes yet -- those land with Z5+, mirroring Phase 1's own history).
-
 const std = @import("std");
 const value_mod = @import("value.zig");
 const Value = value_mod.Value;
