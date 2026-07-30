@@ -1,6 +1,3 @@
-//! AST -> bytecode compiler. Ports pyinterp/compiler.py for the same
-//! subset ast.zig/parser.zig support right now.
-
 const std = @import("std");
 const ast = @import("ast.zig");
 const bytecode = @import("bytecode.zig");
