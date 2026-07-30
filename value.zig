@@ -1,21 +1,9 @@
-//! The runtime Value type. Unlike Phase 1 (which reuses host Python
-//! int/float/str/bool/None directly), Zig has no dynamic typing, so this is
-//! new: a tagged union standing in for "any Python-ish value the VM can push
-//! on its stack." Numeric ops promote int -> float when mixed, matching
-//! Python's numeric tower for the common case.
-
 const std = @import("std");
 const bytecode = @import("bytecode.zig");
 const ast = @import("ast.zig");
 
-/// `vm` is really `*vm.VM`, typed as `*anyopaque` here so this module
-/// doesn't need to depend on vm.zig; callers cast it back (see vm.zig).
 pub const BuiltinFn = *const fn (vm: *anyopaque, allocator: std.mem.Allocator, args: []const Value) anyerror!Value;
 
-/// A Python-style list: reference-semantic (assigning `y = x` aliases the
-/// same storage, matching Python), so it's heap-allocated and Value only
-/// ever holds a pointer to it -- copying a Value around (stack pushes,
-/// locals) never copies the underlying items.
 pub const ListObj = struct {
     items: std.ArrayList(Value) = .empty,
 };
@@ -37,10 +25,6 @@ pub const Value = union(enum) {
     builtin: BuiltinFn,
     list: *ListObj,
     iterator: *IterObj,
-    /// Really a `*worker.Worker` (see worker.zig) -- opaque here so this
-    /// module doesn't need to depend on worker.zig; callers cast it back.
-    /// NOT sendable across a mailbox (see worker.zig's Message type):
-    /// worker handles are per-process resources, not plain data.
     worker: *anyopaque,
 };
 
@@ -212,11 +196,6 @@ pub fn format(v: Value, writer: anytype) !void {
     }
 }
 
-/// The subset of Value that's safe to move across the isolated-heap
-/// boundary between workers: plain data only, deep-copied so neither side
-/// ever holds a pointer into the other's arena. Allocated via
-/// `std.heap.smp_allocator` (thread-safe, independent of any one worker's
-/// arena) -- see worker.zig for where messages actually flow.
 pub const Message = union(enum) {
     int: i64,
     float: f64,
@@ -238,8 +217,6 @@ pub fn valueToMessage(v: Value) (MessageError || std.mem.Allocator.Error)!Messag
     };
 }
 
-/// Copies the message's payload into `allocator` (the receiving worker's
-/// own arena) and frees the message's independent copy.
 pub fn messageToValue(allocator: std.mem.Allocator, msg: Message) !Value {
     return switch (msg) {
         .int => |x| .{ .int = x },
