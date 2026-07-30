@@ -21,19 +21,8 @@ scratch in Zig, with real multithreaded execution.
 ## Quick start
 
 ```sh
-# toolchain is vendored in tools/, nothing installed system-wide
-tools/zig-x86_64-windows-0.16.0/zig.exe build --build-file zython/build.zig
-zython/zig-out/bin/zython.exe zython/tests/programs/fib.zpy
-zython/zig-out/bin/zython.exe --verbose zython/tests/programs/small.zpy
-tools/zig-x86_64-windows-0.16.0/zig.exe build test --build-file zython/build.zig
+zig.exe build --build-file build.zig
+zython.exe fib.zpy
+zython.exe --verbose small.zpy
+zig.exe build test --build-file build.zig
 ```
-
-## Layout
-
-```
-zython/      Lexer, parser, bytecode compiler, VM, worker/message-passing runtime
-tools/       Vendored Zig 0.16.0 toolchain
-```
-
-See [`zython/README.md`](zython/README.md) for architecture details, design tradeoffs, and known
-limitations.
