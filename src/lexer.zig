@@ -357,7 +357,8 @@ test "keywords recognized" {
     const tokens = try tokenizeForTest(allocator, "if True and not False:\n    x = 1\n");
     defer allocator.free(tokens);
 
-    var saw = [_]bool{false} ** 4;
+    var saw = [_]bool{false}**4;
+
     for (tokens) |t| {
         if (t.type == .kw_if) saw[0] = true;
         if (t.type == .kw_true) saw[1] = true;
@@ -397,7 +398,8 @@ test "multi-char operators" {
     const tokens = try tokenizeForTest(allocator, "a == b != c <= d >= e // f\n");
     defer allocator.free(tokens);
 
-    var saw = [_]bool{false} ** 5;
+    var saw = [_]bool{false}**5;
+
     for (tokens) |t| {
         if (t.type == .eqeq) saw[0] = true;
         if (t.type == .noteq) saw[1] = true;
